@@ -47,4 +47,43 @@ router.get('/shoppinglist/:id',(req, res)=>{
 
 });
 
+router.put('/shoppinglist/:id',(req, res)=>{
+    if (!ObjectId.isValid(req.params.id)){
+         res.status(400).send({'Error':'No record with given id'})}
+    
+    var shoppinglist = {
+        name:req.body.name,
+        description: req.body.description,
+        date_added: req.body.date_added,
+        date_created:req.body.date_created
+    };
+    Shoppinglist.findByIdAndUpdate(req.params.id, {$set: shoppinglist}, {new: true}, (err, list)=>{
+        if(!err){
+            res.send(list);
+        }else{
+            console.log('Error in Shoppinglist Update :'+ JSON.stringify(err, undefined,2))
+        }
+
+    });
+
+});
+
+router.delete('/shoppinglist/:id',(req, res)=>{
+    if (!ObjectId.isValid(req.params.id)){
+         res.status(400).send({'Error':'No record with given id'})}
+    
+
+    Shoppinglist.findByIdAndRemove(req.params.id, (err, list)=>{
+        if(!err){
+            res.send({"Message":"SHoppinglist has been deleted"});
+        }else{
+            console.log('Error in Shoppinglist Update :'+ JSON.stringify(err, undefined,2))
+        }
+
+    });
+
+});
+
+
+
 module.exports = router;
