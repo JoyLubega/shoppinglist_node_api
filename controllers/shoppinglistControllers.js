@@ -1,8 +1,8 @@
 const express = require('express')
-var router = express.Router();
-var ObjectId = require('mongoose').Types.ObjectId;
+const router = express.Router();
+const ObjectId = require('mongoose').Types.ObjectId;
 
-var {Shoppinglist} = require('../models/shoppinglist');
+const Shoppinglist = require('../models/shoppinglist');
 
 router.get('/shoppinglists', (req,res)=>{
     Shoppinglist.find((err, lists)=>{
