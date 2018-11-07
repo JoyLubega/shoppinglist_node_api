@@ -4,7 +4,10 @@ const ObjectId = require('mongoose').Types.ObjectId;
 
 const Shoppinglist = require('../models/shoppinglist');
 
+
 router.get('/shoppinglists', (req,res)=>{
+    
+
     Shoppinglist.find((err, lists)=>{
         if (!err){
             res.send(lists);
@@ -16,7 +19,7 @@ router.get('/shoppinglists', (req,res)=>{
 });
 
 router.post('/shoppinglist',(req, res)=>{
-    var shoppinglist = new Shoppinglist({
+    const  shoppinglist = new Shoppinglist({
         name:req.body.name,
         description: req.body.description,
         date_added: req.body.date_added,
