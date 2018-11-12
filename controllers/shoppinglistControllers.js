@@ -6,7 +6,7 @@ const Shoppinglist = require('../models/shoppinglist');
 
 
 router.get('/shoppinglists', (req,res)=>{
-    
+
 
     Shoppinglist.find((err, lists)=>{
         if (!err){
@@ -18,21 +18,25 @@ router.get('/shoppinglists', (req,res)=>{
     });
 });
 
-router.post('/shoppinglist',(req, res)=>{
+router.post('/shoppinglist', async (req, res)=>{
     const  shoppinglist = new Shoppinglist({
         name:req.body.name,
-        description: req.body.description,
-        date_added: req.body.date_added,
-        date_created:req.body.date_created
+        description: req.body.description
     });
-    shoppinglist.save((err, list)=>{
-        if (!err){
-            res.send(list);
-        }else{
-            console.log('Error in Adding Shoppinglist :'+ JSON.stringify(err, undefined,2))
-        }
-    });
+    try{
+         shoppinglist.save((err, list)=>{
+             if (!err){
+                res.send(list);
 
+             }else{
+                 console.log(err)
+                res.status(400).send({"error":err.errors.name.message})
+             }
+        });
+    }catch(err){
+        res.send(err)
+
+    }
 });
 
 router.get('/shoppinglist/:id',(req, res)=>{
@@ -45,7 +49,6 @@ router.get('/shoppinglist/:id',(req, res)=>{
         }else{
             console.log('Error in Retriving Shoppinglist :'+ JSON.stringify(err, undefined,2))
         }
-
     });
 
 });
@@ -54,20 +57,24 @@ router.put('/shoppinglist/:id',(req, res)=>{
     if (!ObjectId.isValid(req.params.id)){
          res.status(400).send({'Error':'No record with given id'})}
     
-    var shoppinglist = {
+    const shoppinglist = {
         name:req.body.name,
-        description: req.body.description,
-        date_added: req.body.date_added,
-        date_created:req.body.date_created
+        description: req.body.description
+        
     };
-    Shoppinglist.findByIdAndUpdate(req.params.id, {$set: shoppinglist}, {new: true}, (err, list)=>{
-        if(!err){
-            res.send(list);
-        }else{
-            console.log('Error in Shoppinglist Update :'+ JSON.stringify(err, undefined,2))
-        }
+    try{
+        Shoppinglist.findByIdAndUpdate(req.params.id, {$set: shoppinglist}, {new: true}, (err, list)=>{
+            if(!err){
+                res.send(list);
+            }else{
+                console.log('Error in Shoppinglist Update :'+ JSON.stringify(err, undefined,2))
+            }
 
-    });
+        });
+    }catch(err){
+        res.send(err)
+    }
+
 
 });
 
