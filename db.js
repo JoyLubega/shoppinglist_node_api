@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-
-mongoose.connect('mongodb://joyceN:wisdominGod2@ds159563.mlab.com:59563/shoppinglists',(err)=>{
+//mongodb://joyceN:wisdominGod2@ds159563 .mlab.com:59563/shoppinglists
+mongoose.connect('//mongodb://joyceN:wisdominGod2@ds159563 .mlab.com:59563/shoppinglists',(err)=>{
     if (!err)
         console.log('MongoDb connection succeedded');
     else
