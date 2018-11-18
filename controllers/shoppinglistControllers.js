@@ -18,25 +18,29 @@ router.get('/shoppinglists', (req,res)=>{
     });
 });
 
-router.post('/shoppinglist', async (req, res)=>{
+router.post('/shoppinglist',  (req, res)=>{
     const  shoppinglist = new Shoppinglist({
         name:req.body.name,
         description: req.body.description
     });
-    try{
-         shoppinglist.save((err, list)=>{
-             if (!err){
-                res.send(list);
 
-             }else{
-                 console.log(err)
-                res.status(400).send({"error":err.errors.name.message})
-             }
-        });
-    }catch(err){
-        res.send(err)
+    if (req.body.name == ""){
+        return res.status(400).json({
+            'Message': `Shoppinglist Name cant be empty!`} );
 
     }
+
+    Shoppinglist.find({'name':req.body.name},(err,list)=>{
+        console.log(list)
+        if (list.length >0){
+            return res.status(201).json({
+                'Message': `Shoppinglist exists!, ${req.body.name }`} );
+        }else{
+            const slist= shoppinglist.save()
+            return res.status(201).json({
+                'Message': `Shoppinglist successfully added!, ${req.body.name }`});
+        }
+    });
 });
 
 router.get('/shoppinglist/:id',(req, res)=>{
